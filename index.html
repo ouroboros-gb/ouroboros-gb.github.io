@@ -128,6 +128,7 @@
 					Your browser does not support the video tag.
 				</video>
 				<figcaption style="font-size:13px;color:var(--muted);margin-top:8px;text-align:center">DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.</figcaption>
+				<div id="video-status" style="font-size:13px;color:var(--muted);margin-top:6px;text-align:center">Video status: <span id="video-status-text">checking…</span></div>
 			</div>
 
 			<footer>
@@ -273,6 +274,52 @@
 						});
 					}
 				}
+
+				// Video diagnostics: show status, attempt basic checks (MIME, CORS, Range support)
+				(function(){
+					const statusText = document.getElementById('video-status-text');
+					const v = document.getElementById('doc-video');
+					if(!v || !statusText) return;
+					function set(msg){
+						statusText.textContent = msg;
+						console.log('Video status:', msg);
+					}
+
+					// Update on common video events
+					v.addEventListener('loadedmetadata', ()=> set('metadata loaded'));
+					v.addEventListener('canplay', ()=> set('can play (ready)'));
+					v.addEventListener('canplaythrough', ()=> set('can play through'));
+					v.addEventListener('playing', ()=> set('playing'));
+					v.addEventListener('pause', ()=> set('paused'));
+					v.addEventListener('error', ()=>{
+						const e = v.error;
+						let msg = 'error';
+						if(e){
+							switch(e.code){
+								case 1: msg = 'User aborted'; break;
+								case 2: msg = 'Network error'; break;
+								case 3: msg = 'Decoding error'; break;
+								case 4: msg = 'Source not supported'; break;
+								default: msg = 'Unknown video error';
+							}
+						}
+						set(msg + ' — check console/network and server headers');
+					});
+
+					// Try a HEAD request to the same src to confirm server response and headers
+					const src = (v.querySelector('source') || {}).src || v.currentSrc || v.src;
+					if(!src){ set('no video source found'); return; }
+
+					fetch(src, {method:'HEAD', mode:'cors'}).then(resp=>{
+						if(!resp.ok){ set('server returned ' + resp.status); return; }
+						const ct = resp.headers.get('content-type') || 'unknown';
+						const ranges = resp.headers.get('accept-ranges') || 'none';
+						set('resource OK — ' + ct + ' — Accept-Ranges: ' + ranges + (v.muted ? ' — muted' : ''));
+					}).catch(err=>{
+						set('HEAD request failed — possible CORS or network issue');
+						console.warn('Video HEAD error', err);
+					});
+				})();
 			})();
 		</script>
 
