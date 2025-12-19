@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Holohoax: Exposed</title>
+		<style>
+			/* Paper-like documentary layout with dark background default */
+			:root{
+				--bg:#0b1220; /* dark background */
+				--paper:#fbf7ef; /* paper color */
+				--text:#102131;
+				--muted:#5b6a72;
+				--accent:#102131;
+				--border:#d8d0c0;
+				--shadow:rgba(2,6,23,0.6);
+			}
+			:root[data-theme="dark"]{
+				--bg:#0b1220;
+				--paper:#0b1220; /* dark paper look */
+				--text:#fbf7ef;
+				--muted:#fbf7efdc;
+				--accent:#fbf7ef;
+				--border:#102131;
+				--shadow:rgba(0,0,0,0.6);
+			}
+
+			html,body{height:100%;margin:0;background-color:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",Times,serif;-webkit-font-smoothing:antialiased}
+			body{display:flex;justify-content:center;padding:40px;position:relative;overflow-x:hidden}
+
+			/* large archival background image (place a neutral, non-propaganda archival photo named image.jpg next to index.html) */
+			body::before{
+				content:"";
+				position:fixed;
+				inset:0;
+				z-index:0;
+				background-image: url('image.jpg');
+				background-size:cover;
+				background-position:center center;
+				background-repeat:no-repeat;
+				/* Reduce full desaturation and increase contrast/opacity so the photo is more visible */
+				filter:grayscale(30%) contrast(95%) brightness(92%);
+				opacity:0.24;
+				pointer-events:none;
+				transform:translateZ(0);
+				background-blend-mode:overlay;
+			}
+			/* Slightly stronger visibility in dark theme */
+			:root[data-theme="dark"] body::before{filter:grayscale(30%) contrast(95%) brightness(90%);opacity:0.26}
+			/* Lighter theme: keep image more subtle */
+			:root:not([data-theme="dark"]) body::before{filter:grayscale(20%) contrast(100%) sepia(6%) brightness(98%);opacity:0.18}
+
+			/* centered paper card */
+			.paper{width:760px;max-width:96%;background:var(--paper);border:1px solid var(--border);box-shadow:0 12px 30px var(--shadow);padding:48px 56px;border-radius:6px;position:relative;z-index:1}
+
+			header{margin-bottom:28px;text-align:center}
+			.title{font-size:34px;margin:0;color:var(--accent);letter-spacing:0.6px}
+			.byline{font-size:13px;color:var(--muted);margin-top:8px}
+
+			main{font-size:16px;line-height:1.65;color:var(--text)}
+			section{margin:20px 0}
+			h2{font-family:Georgia,serif;font-size:20px;margin:0 0 10px;color:var(--text)}
+			p{margin:0 0 14px}
+
+			footer{margin-top:30px;text-align:center;font-size:13px;color:var(--muted)}
+
+			/* theme toggle (subtle) */
+			/* move controls out of the way and make them smaller */
+			.theme-wrap{position:absolute;top:12px;left:12px;z-index:5;display:flex;gap:8px}
+			.theme-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 6px;border-radius:6px;cursor:pointer;font-family:Arial, sans-serif;font-size:12px;opacity:0.9}
+
+			/* Smooth scrolling and custom scrollbars (WebKit & Firefox) */
+			html{scroll-behavior:smooth}
+
+			/* WebKit browsers */
+			::-webkit-scrollbar{width:12px;height:12px}
+			::-webkit-scrollbar-track{background:transparent;border-radius:999px}
+			::-webkit-scrollbar-thumb{border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+			:root[data-theme="dark"] ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
+			:root:not([data-theme="dark"]) ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.09)}
+			::-webkit-scrollbar-thumb:hover{filter:brightness(1.25)}
+
+			/* Firefox */
+			html{scrollbar-width:thin;scrollbar-color: rgba(255,255,255,0.08) transparent}
+			:root:not([data-theme="dark"]) html{scrollbar-color: rgba(0,0,0,0.09) transparent}
+
+			@media (max-width:640px){.paper{padding:28px 22px}.title{font-size:24px}}
+		</style>
+	</head>
+	<body>
+		<div class="paper" role="main">
+			<div class="theme-wrap">
+				<button id="theme-toggle" class="theme-toggle" aria-pressed="true">Light</button>
+				<button id="amb-toggle" class="theme-toggle" aria-pressed="false" title="Toggle ambience">Ambience</button>
+			</div>
+
+			<header>
+				<h1 class="title">Holohoax: The Big Lie</h1>
+				<div class="byline">A psychological and political weapon Jewish supremacists use to manipulate public perception on the Third Reich.</div>
+			</header>
+
+			<main>
+				<section>
+					<h2>Introduction</h2>
+					<p> The Jewish powers have used the Holocaust as an instrument of political manipulation to smear the name of Adolf Hitler and the Nazi government.</p>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+				</section>
+			</main>
+
+			<!-- Embedded video (responsive) -->
+			<div class="video-wrap" aria-label="Documentary video">
+				<video id="doc-video" controls preload="metadata" playsinline poster="thumbnail.png">
+					<source src="video.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+				<figcaption style="font-size:13px;color:var(--muted);margin-top:8px;text-align:center">DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.</figcaption>
+			</div>
+
+			<footer>
+				© 2025 — Credit to Holocaust 101 for media and resources used on this page.
+			</footer>
+		</div>
+
+		<!-- Ambient audio (very quiet by default) -->
+		<audio id="amb-audio" loop preload="auto">
+			<source src="music.mp3" type="audio/mpeg">
+			Your browser does not support the audio element.
+		</audio>
+
+		<script>
+			(function(){
+				const root = document.documentElement;
+				const toggle = document.getElementById('theme-toggle');
+				const ambToggle = document.getElementById('amb-toggle');
+				const ambAudio = document.getElementById('amb-audio');
+				// set a very low default ambience volume
+				if(ambAudio) ambAudio.volume = 0.05;
+				const stored = localStorage.getItem('theme');
+				const apply = mode => {
+					if(mode === 'dark'){
+						root.setAttribute('data-theme','dark');
+						toggle.textContent = 'Light';
+						toggle.setAttribute('aria-pressed','true');
+					} else {
+						root.removeAttribute('data-theme');
+						toggle.textContent = 'Dark';
+						toggle.setAttribute('aria-pressed','false');
+					}
+					localStorage.setItem('theme', mode);
+				};
+
+				// Default to dark when nothing stored
+				apply(stored === 'light' ? 'light' : 'dark');
+
+				toggle.addEventListener('click', ()=> {
+					const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+					apply(current === 'dark' ? 'light' : 'dark');
+				});
+
+				// Ambient audio toggle handling: attempt autoplay, fallback to user-initiated play
+				if(ambToggle && ambAudio){
+					const storedA = localStorage.getItem('ambience');
+					const setAmb = on => {
+						ambToggle.setAttribute('aria-pressed', String(!!on));
+						localStorage.setItem('ambience', on ? 'on' : 'off');
+						if(on){
+							ambAudio.play().catch(()=>{});
+						} else {
+							ambAudio.pause();
+							ambAudio.currentTime = 0;
+						}
+					};
+					// default: restore stored preference or keep off
+					setAmb(storedA === 'on');
+					ambToggle.addEventListener('click', ()=> setAmb(ambToggle.getAttribute('aria-pressed') !== 'true'));
+					// try autoplay quietly on load if allowed
+					ambAudio.play().catch(()=>{});
+
+					// Pause ambience while the video is playing, resume after
+					const videoEl = document.getElementById('doc-video');
+					let ambAutoPaused = false;
+					if(videoEl){
+						videoEl.addEventListener('play', ()=>{
+							if(ambAudio && !ambAudio.paused){ ambAudio.pause(); ambAutoPaused = true; }
+						});
+						const resumeAmb = ()=>{
+							if(ambAudio && ambAutoPaused && ambToggle && ambToggle.getAttribute('aria-pressed') === 'true'){
+								ambAudio.play().catch(()=>{});
+								ambAutoPaused = false;
+							}
+						};
+						videoEl.addEventListener('pause', resumeAmb);
+						videoEl.addEventListener('ended', resumeAmb);
+						// if user turns ambience on while video is playing, immediately pause ambience and mark auto-paused
+						ambToggle.addEventListener('click', ()=>{
+							if(videoEl && !videoEl.paused && ambToggle.getAttribute('aria-pressed') === 'true'){
+								if(ambAudio){ ambAudio.pause(); ambAutoPaused = true; }
+							}
+						});
+					}
+				}
+			})();
+		</script>
+
+		<style>
+			/* Video container styling */
+			.video-wrap{margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:8px}
+			.video-wrap video{width:100%;max-width:100%;height:auto;max-height:360px;border:1px solid var(--border);border-radius:6px;box-shadow:0 10px 24px var(--shadow);background:#000}
+			.video-frame{position:relative;width:100%;max-width:640px;margin:0 auto}
+			@media (max-width:640px){.video-wrap video{max-height:320px;object-fit:cover}}
+		</style>
+	</body>
+</html>
