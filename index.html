@@ -123,7 +123,7 @@
 
 			<!-- Embedded video (responsive) -->
 			<div class="video-wrap" aria-label="Documentary video">
-				<video id="doc-video" controls preload="metadata" playsinline poster="thumbnail.png">
+				<video id="doc-video" controls preload="auto" playsinline muted poster="thumbnail.png">
 					<source src="video.mp4" type="video/mp4">
 					Your browser does not support the video tag.
 				</video>
@@ -140,6 +140,11 @@
 			<source src="music.mp3" type="audio/mpeg">
 			Your browser does not support the audio element.
 		</audio>
+
+		<!-- Fallback control shown when autoplay with sound is blocked -->
+		<div id="audio-fallback" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:none">
+			<button id="audio-fallback-btn" style="background:#102131;color:#fbf7ef;border:none;padding:10px 14px;border-radius:6px;cursor:pointer">Enable sound</button>
+		</div>
 
 		<script>
 			(function(){
@@ -171,9 +176,12 @@
 					apply(current === 'dark' ? 'light' : 'dark');
 				});
 
-				// Ambient audio toggle handling: attempt autoplay, fallback to user-initiated play
+				// Ambient audio toggle handling: attempt audible autoplay on load, fallback to muted autoplay or user gesture
 				if(ambToggle && ambAudio){
 					const storedA = localStorage.getItem('ambience');
+					const fallbackDiv = document.getElementById('audio-fallback');
+					const fallbackBtn = document.getElementById('audio-fallback-btn');
+
 					const setAmb = on => {
 						ambToggle.setAttribute('aria-pressed', String(!!on));
 						localStorage.setItem('ambience', on ? 'on' : 'off');
@@ -184,11 +192,61 @@
 							ambAudio.currentTime = 0;
 						}
 					};
-					// default: restore stored preference or keep off
-					setAmb(storedA === 'on');
-					ambToggle.addEventListener('click', ()=> setAmb(ambToggle.getAttribute('aria-pressed') !== 'true'));
-					// try autoplay quietly on load if allowed
-					ambAudio.play().catch(()=>{});
+
+					// default: restore stored preference or default to ON (user requested autoplay)
+					const wantOn = storedA === 'off' ? false : true;
+					ambToggle.setAttribute('aria-pressed', String(!!wantOn));
+
+					// small volume by default
+					ambAudio.volume = 0.05;
+
+					// Try to play with sound. If blocked, play muted and show a visible fallback button
+					function tryAutoplayWithSound(){
+						ambAudio.muted = false;
+						ambAudio.play().then(()=>{
+							// autoplay with audible sound succeeded
+							if(fallbackDiv) fallbackDiv.style.display = 'none';
+							if(wantOn) setAmb(true);
+						}).catch(()=>{
+							// audible autoplay blocked: try muted autoplay then ask user to enable
+							ambAudio.muted = true;
+							ambAudio.play().catch(()=>{});
+							if(fallbackDiv) fallbackDiv.style.display = 'block';
+							ambToggle.setAttribute('aria-pressed','false');
+							localStorage.setItem('ambience','off');
+						});
+					}
+
+					tryAutoplayWithSound();
+
+					ambToggle.addEventListener('click', ()=>{
+						const pressed = ambToggle.getAttribute('aria-pressed') === 'true';
+						const newOn = !pressed;
+						if(newOn){
+							// If audio is currently muted due to autoplay policy, unmute when the user requests sound
+							ambAudio.muted = false;
+							ambAudio.volume = 0.05;
+							ambAudio.play().catch(()=>{});
+							if(fallbackDiv) fallbackDiv.style.display = 'none';
+						} else {
+							ambAudio.pause();
+						}
+						ambToggle.setAttribute('aria-pressed', String(newOn));
+						localStorage.setItem('ambience', newOn ? 'on' : 'off');
+					});
+
+					if(fallbackBtn){
+						fallbackBtn.addEventListener('click', ()=>{
+							// user gesture: unmute and play audible
+							ambAudio.muted = false;
+							ambAudio.volume = 0.08;
+							ambAudio.play().then(()=>{
+								if(fallbackDiv) fallbackDiv.style.display = 'none';
+								ambToggle.setAttribute('aria-pressed','true');
+								localStorage.setItem('ambience','on');
+							}).catch(()=>{});
+						});
+					}
 
 					// Pause ambience while the video is playing, resume after
 					const videoEl = document.getElementById('doc-video');
@@ -199,6 +257,8 @@
 						});
 						const resumeAmb = ()=>{
 							if(ambAudio && ambAutoPaused && ambToggle && ambToggle.getAttribute('aria-pressed') === 'true'){
+								// ensure ambience is unmuted for user
+								ambAudio.muted = false;
 								ambAudio.play().catch(()=>{});
 								ambAutoPaused = false;
 							}
