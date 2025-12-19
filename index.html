@@ -310,14 +310,31 @@
 					const src = (v.querySelector('source') || {}).src || v.currentSrc || v.src;
 					if(!src){ set('no video source found'); return; }
 
+					const FALLBACK_VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
 					fetch(src, {method:'HEAD', mode:'cors'}).then(resp=>{
-						if(!resp.ok){ set('server returned ' + resp.status); return; }
+						if(!resp.ok){
+							set('server returned ' + resp.status);
+							// If the original resource is missing, attempt using a hosted fallback so the page still works
+							if(resp.status === 404){
+								set('resource missing (404) — switching to fallback video');
+								const s = v.querySelector('source');
+								if(s){ s.src = FALLBACK_VIDEO; } else { v.src = FALLBACK_VIDEO; }
+								v.load();
+								// try to autoplay muted so user can confirm playback
+								v.play().catch(()=>{});
+							}
+							return;
+						}
 						const ct = resp.headers.get('content-type') || 'unknown';
 						const ranges = resp.headers.get('accept-ranges') || 'none';
 						set('resource OK — ' + ct + ' — Accept-Ranges: ' + ranges + (v.muted ? ' — muted' : ''));
 					}).catch(err=>{
-						set('HEAD request failed — possible CORS or network issue');
+						set('HEAD request failed — possible CORS or network issue; switching to fallback');
 						console.warn('Video HEAD error', err);
+						const s = v.querySelector('source');
+						if(s){ s.src = FALLBACK_VIDEO; } else { v.src = FALLBACK_VIDEO; }
+						v.load();
+						v.play().catch(()=>{});
 					});
 				})();
 			})();
