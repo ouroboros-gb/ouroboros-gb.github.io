@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>Holohoax: Exposed</title>
+		<title>Exposed</title>
 		<style>
 			/* Paper-like documentary layout with dark background default */
 			:root{
@@ -25,10 +25,24 @@
 				--shadow:rgba(0,0,0,0.6);
 			}
 
-			html,body{height:100%;margin:0;background-color:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",Times,serif;-webkit-font-smoothing:antialiased}
-			body{display:flex;justify-content:center;padding:40px;position:relative;overflow-x:hidden}
+			html,body{
+				margin:0;
+				padding:0;
+				min-height:100%;
+				background-color:var(--bg);
+				color:var(--text);
+				font-family:Georgia,"Times New Roman",Times,serif;
+				-webkit-font-smoothing:antialiased;
+			}
+			body{
+				display:flex;
+				justify-content:center;
+				padding:40px 20px;
+				position:relative;
+				box-sizing:border-box;
+			}
 
-			/* large archival background image (place a neutral, non-propaganda archival photo named image.jpg next to index.html) */
+			/* large archival background image - covers the entire page */
 			body::before{
 				content:"";
 				position:fixed;
@@ -38,20 +52,28 @@
 				background-size:cover;
 				background-position:center center;
 				background-repeat:no-repeat;
-				/* Reduce full desaturation and increase contrast/opacity so the photo is more visible */
 				filter:grayscale(30%) contrast(95%) brightness(92%);
 				opacity:0.24;
 				pointer-events:none;
 				transform:translateZ(0);
 				background-blend-mode:overlay;
 			}
-			/* Slightly stronger visibility in dark theme */
 			:root[data-theme="dark"] body::before{filter:grayscale(30%) contrast(95%) brightness(90%);opacity:0.26}
-			/* Lighter theme: keep image more subtle */
 			:root:not([data-theme="dark"]) body::before{filter:grayscale(20%) contrast(100%) sepia(6%) brightness(98%);opacity:0.18}
 
 			/* centered paper card */
-			.paper{width:760px;max-width:96%;background:var(--paper);border:1px solid var(--border);box-shadow:0 12px 30px var(--shadow);padding:48px 56px;border-radius:6px;position:relative;z-index:1}
+			.paper{
+				width:760px;
+				max-width:96%;
+				background:var(--paper);
+				border:1px solid var(--border);
+				box-shadow:0 12px 30px var(--shadow);
+				padding:48px 56px;
+				border-radius:6px;
+				position:relative;
+				z-index:1;
+				box-sizing:border-box;
+			}
 
 			header{margin-bottom:28px;text-align:center}
 			.title{font-size:34px;margin:0;color:var(--accent);letter-spacing:0.6px}
@@ -64,34 +86,126 @@
 
 			footer{margin-top:30px;text-align:center;font-size:13px;color:var(--muted)}
 
-			/* theme toggle (subtle) */
-			/* move controls out of the way and make them smaller */
-			.theme-wrap{position:absolute;top:12px;left:12px;z-index:5;display:flex;gap:8px}
-			.theme-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 6px;border-radius:6px;cursor:pointer;font-family:Arial, sans-serif;font-size:12px;opacity:0.9}
+			/* Controls */
+			.theme-wrap{
+				position:absolute;
+				top:12px;
+				left:12px;
+				z-index:5;
+				display:flex;
+				gap:8px;
+				align-items:center;
+			}
+			.theme-toggle, .disclaimer-trigger, .music-toggle{
+				background:transparent;
+				border:1px solid var(--border);
+				color:var(--muted);
+				padding:4px 8px;
+				border-radius:6px;
+				cursor:pointer;
+				font-family:Arial, sans-serif;
+				font-size:12px;
+			}
 
-			/* Smooth scrolling and custom scrollbars (WebKit & Firefox) */
+			/* Disclaimer dropdown */
+			.disclaimer-popup{
+				display:none;
+				position:absolute;
+				top:40px;
+				left:12px;
+				width:340px;
+				background:var(--paper);
+				border:1px solid var(--border);
+				border-radius:6px;
+				box-shadow:0 8px 20px var(--shadow);
+				padding:16px;
+				font-size:13px;
+				line-height:1.5;
+				color:var(--text);
+				z-index:10;
+			}
+			.disclaimer-popup.visible{display:block}
+
+			/* Images */
+			.content-image{
+				margin:40px 0;
+				text-align:center;
+				width:100%;
+			}
+			.content-image img{
+				max-width:100%;
+				height:auto;
+				border:1px solid var(--border);
+				border-radius:6px;
+				box-shadow:0 10px 24px var(--shadow);
+				display:block;
+				margin:0 auto;
+			}
+
+			/* Video */
+			.video-wrap{
+				margin:40px 0;
+				width:100%;
+				text-align:center;
+			}
+			.video-wrap video{
+				max-width:100%;
+				height:auto;
+				max-height:400px;
+				border:1px solid var(--border);
+				border-radius:6px;
+				box-shadow:0 10px 24px var(--shadow);
+				background:#000;
+			}
+
+			/* Fallback button for when autoplay with sound is blocked */
+			#audio-fallback{
+				position:fixed;
+				right:14px;
+				bottom:14px;
+				z-index:9999;
+				display:none;
+			}
+			#audio-fallback-btn{
+				background:#102131;
+				color:#fbf7ef;
+				border:none;
+				padding:10px 14px;
+				border-radius:6px;
+				cursor:pointer;
+				font-size:13px;
+			}
+
+			/* Scrollbars */
 			html{scroll-behavior:smooth}
-
-			/* WebKit browsers */
 			::-webkit-scrollbar{width:12px;height:12px}
 			::-webkit-scrollbar-track{background:transparent;border-radius:999px}
 			::-webkit-scrollbar-thumb{border-radius:999px;border:3px solid transparent;background-clip:padding-box}
 			:root[data-theme="dark"] ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
 			:root:not([data-theme="dark"]) ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.09)}
 			::-webkit-scrollbar-thumb:hover{filter:brightness(1.25)}
-
-			/* Firefox */
 			html{scrollbar-width:thin;scrollbar-color: rgba(255,255,255,0.08) transparent}
 			:root:not([data-theme="dark"]) html{scrollbar-color: rgba(0,0,0,0.09) transparent}
 
-			@media (max-width:640px){.paper{padding:28px 22px}.title{font-size:24px}}
+			@media (max-width:640px){
+				.paper{padding:28px 22px}
+				.title{font-size:24px}
+				.content-image{margin:30px 0}
+				.video-wrap video{max-height:320px}
+				.disclaimer-popup{width:280px}
+			}
 		</style>
 	</head>
 	<body>
 		<div class="paper" role="main">
 			<div class="theme-wrap">
 				<button id="theme-toggle" class="theme-toggle" aria-pressed="true">Light</button>
-				<button id="amb-toggle" class="theme-toggle" aria-pressed="false" title="Toggle ambience">Ambience</button>
+				<button id="music-toggle" class="music-toggle" aria-pressed="true">Music: On</button>
+				<button id="disclaimer-trigger" class="disclaimer-trigger">Disclaimer ▼</button>
+				
+				<div id="disclaimer-popup" class="disclaimer-popup">
+					DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.
+				</div>
 			</div>
 
 			<header>
@@ -102,249 +216,201 @@
 			<main>
 				<section>
 					<h2>Introduction</h2>
-					<p> The Jewish powers have used the Holocaust as an instrument of political manipulation to smear the name of Adolf Hitler and the Nazi government.</p>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
+					<p>The Jewish powers have used the Holocaust as an instrument of political manipulation to smear the name of Adolf Hitler and the Nazi government.</p>
 				</section>
 			</main>
 
-			<!-- Embedded video (responsive) -->
 			<div class="video-wrap" aria-label="Documentary video">
-				<video id="doc-video" controls preload="auto" playsinline muted poster="thumbnail.png">
+				<video id="doc-video" controls preload="auto" playsinline poster="thumbnail.png">
 					<source src="video.mp4" type="video/mp4">
 					Your browser does not support the video tag.
 				</video>
-				<figcaption style="font-size:13px;color:var(--muted);margin-top:8px;text-align:center">DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.</figcaption>
 			</div>
 
-			<footer>
-				© 2025 — Credit to Holocaust 101 for media and resources used on this page.
-			</footer>
+			<div style="margin-top: 60px;"></div>
+
+			<header>
+				<h1 class="title">"Anti-Christian Reich"</h1>
+				<div class="byline">A lie concieved by the Left and Jewish supremacists to undermine Christian values in Nazi Germany.</div>
+			</header>
+
+			<section>
+				<h2>Christianity in Nazi Germany, and its misconceptions.</h2>
+				<p>During the Nazi era, Christanity was an ally of the Nazi party and government. Adolf Hitler, born Catholic, was openly anti-atheist; believing that it must be stomped out of Germany.</p>
+			</section>
+
+			<div class="content-image">
+				<img src="image1.webp" alt="Relevant historical image">
+			</div>
+
+			<div class="content-image">
+				<img src="image2.webp" alt="Relevant historical image">
+			</div>
+
+			<div class="content-image">
+				<img src="image3.webp" alt="Relevant historical image">
+			</div>
+
+			<section>
+				<h2>Key Bible quote (Revelation 2:9):</h2>
+				<p>"I know thy works, and tribulation, and poverty, (but thou art rich) and I know the blasphemy of them which say they are Jews, and are not, but are the synagogue of Satan." This quote from the Bible (Revelation 2:9) exposes
+					how the Jewish people are not the true descendants of Abraham, Isaac, and Jacob, but rather impostors who have infiltrated the Christian faith to spread their own agenda. This quote proves
+					that the Jewish people are not to be trusted, and that they are a threat to the Christian faith. Furthmore, it is us - true Christians - who are the true 'Chosen people' and the true 'Jewish people', not these imposters.
+				</p>
+			</section>
+
+			<section>
+				<h2>Christianity within Nazi Germany:</h2>
+				<p>In Nazi Germany, the government implemented an scheme/motto called "Kinder, Küche, Kirche". This motto means "Children, Church, Kitchen"
+					We can see this motto reflected in the government's policies and actions towards Christianity during that time period. That they valued
+				and protected the Christian faith. Wanting to implement it into the Nazi ideology; and everyday life of Nazi women and children.</p>
+			</section>
+
+			<footer></footer>
 		</div>
 
-		<!-- Ambient audio (very quiet by default) -->
-		<audio id="amb-audio" loop preload="auto">
+		<!-- Ambient background music -->
+		<audio id="bg-music" loop preload="auto">
 			<source src="music.mp3" type="audio/mpeg">
 			Your browser does not support the audio element.
 		</audio>
 
-		<!-- Fallback control shown when autoplay with sound is blocked -->
-		<div id="audio-fallback" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:none">
-			<button id="audio-fallback-btn" style="background:#102131;color:#fbf7ef;border:none;padding:10px 14px;border-radius:6px;cursor:pointer">Enable sound</button>
+		<!-- Fallback button shown only if audible autoplay is blocked -->
+		<div id="audio-fallback">
+			<button id="audio-fallback-btn">Enable Music</button>
 		</div>
 
 		<script>
 			(function(){
 				const root = document.documentElement;
-				const toggle = document.getElementById('theme-toggle');
-				const ambToggle = document.getElementById('amb-toggle');
-				const ambAudio = document.getElementById('amb-audio');
-				// set a very low default ambience volume
-				if(ambAudio) ambAudio.volume = 0.05;
-				const stored = localStorage.getItem('theme');
-				const apply = mode => {
+				const themeToggle = document.getElementById('theme-toggle');
+				const musicToggle = document.getElementById('music-toggle');
+				const disclaimerTrigger = document.getElementById('disclaimer-trigger');
+				const disclaimerPopup = document.getElementById('disclaimer-popup');
+				const music = document.getElementById('bg-music');
+				const video = document.getElementById('doc-video');
+				const fallback = document.getElementById('audio-fallback');
+				const fallbackBtn = document.getElementById('audio-fallback-btn');
+
+				// Low ambience volume
+				music.volume = 0.12;
+
+				// Restore saved preferences (default: music ON)
+				const savedTheme = localStorage.getItem('theme');
+				const savedMusic = localStorage.getItem('music') !== 'off'; // default true
+
+				// Theme
+				const applyTheme = mode => {
 					if(mode === 'dark'){
 						root.setAttribute('data-theme','dark');
-						toggle.textContent = 'Light';
-						toggle.setAttribute('aria-pressed','true');
+						themeToggle.textContent = 'Light';
+						themeToggle.setAttribute('aria-pressed','true');
 					} else {
 						root.removeAttribute('data-theme');
-						toggle.textContent = 'Dark';
-						toggle.setAttribute('aria-pressed','false');
+						themeToggle.textContent = 'Dark';
+						themeToggle.setAttribute('aria-pressed','false');
 					}
 					localStorage.setItem('theme', mode);
 				};
+				applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
-				// Default to dark when nothing stored
-				apply(stored === 'light' ? 'light' : 'dark');
-
-				toggle.addEventListener('click', ()=> {
+				themeToggle.addEventListener('click', ()=> {
 					const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-					apply(current === 'dark' ? 'light' : 'dark');
+					applyTheme(current === 'dark' ? 'light' : 'dark');
 				});
 
-				// Ambient audio toggle handling: attempt audible autoplay on load, fallback to muted autoplay or user gesture
-				if(ambToggle && ambAudio){
-					const storedA = localStorage.getItem('ambience');
-					const fallbackDiv = document.getElementById('audio-fallback');
-					const fallbackBtn = document.getElementById('audio-fallback-btn');
+				// Music state
+				let musicEnabled = savedMusic;
+				let musicAutoPaused = false; // tracks if we paused due to video
 
-					const setAmb = on => {
-						ambToggle.setAttribute('aria-pressed', String(!!on));
-						localStorage.setItem('ambience', on ? 'on' : 'off');
-						if(on){
-							ambAudio.play().catch(()=>{});
-						} else {
-							ambAudio.pause();
-							ambAudio.currentTime = 0;
+				const updateMusicButton = () => {
+					musicToggle.textContent = musicEnabled ? 'Music: On' : 'Music: Off';
+					musicToggle.setAttribute('aria-pressed', musicEnabled);
+				};
+
+				const playMusic = () => {
+					music.muted = false;
+					music.play().catch(() => {
+						// If still blocked, fall back to muted + button
+						music.muted = true;
+						music.play().catch(() => {});
+						fallback.style.display = 'block';
+					});
+				};
+
+				const stopMusic = () => {
+					music.pause();
+				};
+
+				const tryStartMusic = () => {
+					if (musicEnabled && !musicAutoPaused) {
+						playMusic();
+					}
+				};
+
+				// Initial music setup
+				updateMusicButton();
+				if (musicEnabled) {
+					playMusic();
+				}
+
+				// Music toggle button
+				musicToggle.addEventListener('click', () => {
+					musicEnabled = !musicEnabled;
+					updateMusicButton();
+					localStorage.setItem('music', musicEnabled ? 'on' : 'off');
+
+					if (musicEnabled) {
+						playMusic();
+					} else {
+						stopMusic();
+						fallback.style.display = 'none';
+					}
+				});
+
+				// Fallback button (user gesture to unmute)
+				if (fallbackBtn) {
+					fallbackBtn.addEventListener('click', () => {
+						music.muted = false;
+						music.volume = 0.12;
+						music.play().then(() => {
+							fallback.style.display = 'none';
+						});
+					});
+				}
+
+				// Pause music when video plays, resume when video pauses/ends (only if music is enabled)
+				if (video) {
+					video.addEventListener('play', () => {
+						if (!music.paused) {
+							stopMusic();
+							musicAutoPaused = true;
+						}
+					});
+
+					const resumeIfNeeded = () => {
+						if (musicEnabled && musicAutoPaused) {
+							playMusic();
+							musicAutoPaused = false;
 						}
 					};
 
-					// default: restore stored preference or default to ON (user requested autoplay)
-					const wantOn = storedA === 'off' ? false : true;
-					ambToggle.setAttribute('aria-pressed', String(!!wantOn));
-
-					// small volume by default
-					ambAudio.volume = 0.05;
-
-					// Try to play with sound. If blocked, play muted and show a visible fallback button
-					function tryAutoplayWithSound(){
-						ambAudio.muted = false;
-						ambAudio.play().then(()=>{
-							// autoplay with audible sound succeeded
-							if(fallbackDiv) fallbackDiv.style.display = 'none';
-							if(wantOn) setAmb(true);
-						}).catch(()=>{
-							// audible autoplay blocked: try muted autoplay then ask user to enable
-							ambAudio.muted = true;
-							ambAudio.play().catch(()=>{});
-							if(fallbackDiv) fallbackDiv.style.display = 'block';
-							ambToggle.setAttribute('aria-pressed','false');
-							localStorage.setItem('ambience','off');
-						});
-					}
-
-					tryAutoplayWithSound();
-
-					ambToggle.addEventListener('click', ()=>{
-						const pressed = ambToggle.getAttribute('aria-pressed') === 'true';
-						const newOn = !pressed;
-						if(newOn){
-							// If audio is currently muted due to autoplay policy, unmute when the user requests sound
-							ambAudio.muted = false;
-							ambAudio.volume = 0.05;
-							ambAudio.play().catch(()=>{});
-							if(fallbackDiv) fallbackDiv.style.display = 'none';
-						} else {
-							ambAudio.pause();
-						}
-						ambToggle.setAttribute('aria-pressed', String(newOn));
-						localStorage.setItem('ambience', newOn ? 'on' : 'off');
-					});
-
-					if(fallbackBtn){
-						fallbackBtn.addEventListener('click', ()=>{
-							// user gesture: unmute and play audible
-							ambAudio.muted = false;
-							ambAudio.volume = 0.08;
-							ambAudio.play().then(()=>{
-								if(fallbackDiv) fallbackDiv.style.display = 'none';
-								ambToggle.setAttribute('aria-pressed','true');
-								localStorage.setItem('ambience','on');
-							}).catch(()=>{});
-						});
-					}
-
-					// Pause ambience while the video is playing, resume after
-					const videoEl = document.getElementById('doc-video');
-					let ambAutoPaused = false;
-					if(videoEl){
-						videoEl.addEventListener('play', ()=>{
-							if(ambAudio && !ambAudio.paused){ ambAudio.pause(); ambAutoPaused = true; }
-						});
-						const resumeAmb = ()=>{
-							if(ambAudio && ambAutoPaused && ambToggle && ambToggle.getAttribute('aria-pressed') === 'true'){
-								// ensure ambience is unmuted for user
-								ambAudio.muted = false;
-								ambAudio.play().catch(()=>{});
-								ambAutoPaused = false;
-							}
-						};
-						videoEl.addEventListener('pause', resumeAmb);
-						videoEl.addEventListener('ended', resumeAmb);
-						// if user turns ambience on while video is playing, immediately pause ambience and mark auto-paused
-						ambToggle.addEventListener('click', ()=>{
-							if(videoEl && !videoEl.paused && ambToggle.getAttribute('aria-pressed') === 'true'){
-								if(ambAudio){ ambAudio.pause(); ambAutoPaused = true; }
-							}
-						});
-					}
+					video.addEventListener('pause', resumeIfNeeded);
+					video.addEventListener('ended', resumeIfNeeded);
 				}
 
-				// Video diagnostics: show status, attempt basic checks (MIME, CORS, Range support)
-				(function(){
-					const statusText = document.getElementById('video-status-text');
-					const v = document.getElementById('doc-video');
-					if(!v || !statusText) return;
-					function set(msg){
-						statusText.textContent = msg;
-						console.log('Video status:', msg);
-					}
+				// Disclaimer dropdown
+				disclaimerTrigger.addEventListener('click', (e) => {
+					e.stopPropagation();
+					disclaimerPopup.classList.toggle('visible');
+					disclaimerTrigger.textContent = disclaimerPopup.classList.contains('visible') ? 'Disclaimer ▲' : 'Disclaimer ▼';
+				});
 
-					// Update on common video events
-					v.addEventListener('loadedmetadata', ()=> set('metadata loaded'));
-					v.addEventListener('canplay', ()=> set('can play (ready)'));
-					v.addEventListener('canplaythrough', ()=> set('can play through'));
-					v.addEventListener('playing', ()=> set('playing'));
-					v.addEventListener('pause', ()=> set('paused'));
-					v.addEventListener('error', ()=>{
-						const e = v.error;
-						let msg = 'error';
-						if(e){
-							switch(e.code){
-								case 1: msg = 'User aborted'; break;
-								case 2: msg = 'Network error'; break;
-								case 3: msg = 'Decoding error'; break;
-								case 4: msg = 'Source not supported'; break;
-								default: msg = 'Unknown video error';
-							}
-						}
-						set(msg + ' — check console/network and server headers');
-					});
-
-					// Try a HEAD request to the same src to confirm server response and headers
-					const src = (v.querySelector('source') || {}).src || v.currentSrc || v.src;
-					if(!src){ set('no video source found'); return; }
-
-					const FALLBACK_VIDEO = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
-					fetch(src, {method:'HEAD', mode:'cors'}).then(resp=>{
-						if(!resp.ok){
-							set('server returned ' + resp.status);
-							// If the original resource is missing, attempt using a hosted fallback so the page still works
-							if(resp.status === 404){
-								set('resource missing (404) — switching to fallback video');
-								const s = v.querySelector('source');
-								if(s){ s.src = FALLBACK_VIDEO; } else { v.src = FALLBACK_VIDEO; }
-								v.load();
-								// try to autoplay muted so user can confirm playback
-								v.play().catch(()=>{});
-							}
-							return;
-						}
-						const ct = resp.headers.get('content-type') || 'unknown';
-						const ranges = resp.headers.get('accept-ranges') || 'none';
-						set('resource OK — ' + ct + ' — Accept-Ranges: ' + ranges + (v.muted ? ' — muted' : ''));
-					}).catch(err=>{
-						set('HEAD request failed — possible CORS or network issue; switching to fallback');
-						console.warn('Video HEAD error', err);
-						const s = v.querySelector('source');
-						if(s){ s.src = FALLBACK_VIDEO; } else { v.src = FALLBACK_VIDEO; }
-						v.load();
-						v.play().catch(()=>{});
-					});
-				})();
+				document.addEventListener('click', () => {
+					disclaimerPopup.classList.remove('visible');
+					disclaimerTrigger.textContent = 'Disclaimer ▼';
+				});
 			})();
 		</script>
-
-		<style>
-			/* Video container styling */
-			.video-wrap{margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:8px}
-			.video-wrap video{width:100%;max-width:100%;height:auto;max-height:360px;border:1px solid var(--border);border-radius:6px;box-shadow:0 10px 24px var(--shadow);background:#000}
-			.video-frame{position:relative;width:100%;max-width:640px;margin:0 auto}
-			@media (max-width:640px){.video-wrap video{max-height:320px;object-fit:cover}}
-		</style>
 	</body>
 </html>
