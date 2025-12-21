@@ -6,22 +6,14 @@
 		<title>Exposed</title>
         <link rel="icon" href="tabimage.webp" type="image/webp">
 		<style>
-			/* Paper-like documentary layout with dark background default */
+			/* Force dark theme only */
 			:root{
-				--bg:#0b1220; /* dark background */
-				--paper:#fbf7ef; /* paper color */
-				--text:#102131;
-				--muted:#5b6a72;
-				--accent:#102131;
-				--border:#d8d0c0;
-				--shadow:rgba(2,6,23,0.6);
-			}
-			:root[data-theme="dark"]{
 				--bg:#0b1220;
-				--paper:#0b1220; /* dark paper look */
+				--paper:#0b1220;
 				--text:#fbf7ef;
-				--muted:#fbf7efdc;
+				--muted:#fbf7efaa;
 				--accent:#fbf7ef;
+				--accent-glow:#ff6666; /* softer red */
 				--border:#102131;
 				--shadow:rgba(0,0,0,0.6);
 			}
@@ -32,18 +24,21 @@
 				min-height:100%;
 				background-color:var(--bg);
 				color:var(--text);
-				font-family:Georgia,"Times New Roman",Times,serif;
+				font-family:Georgia,"Times New Roman",Times,serif; /* back to original serif */
 				-webkit-font-smoothing:antialiased;
+				overflow-x:hidden;
+				scroll-behavior:smooth;
 			}
 			body{
 				display:flex;
-				justify-content:center;
-				padding:40px 20px;
-				position:relative;
-				box-sizing:border-box;
+				flex-direction:column;
 			}
 
-			/* large archival background image - covers the entire page */
+			/* Hide scrollbar */
+			html::-webkit-scrollbar { display: none; }
+			html { -ms-overflow-style: none; scrollbar-width: none; }
+
+			/* large archival background image - full page */
 			body::before{
 				content:"";
 				position:fixed;
@@ -53,17 +48,96 @@
 				background-size:cover;
 				background-position:center center;
 				background-repeat:no-repeat;
-				filter:grayscale(30%) contrast(95%) brightness(92%);
-				opacity:0.24;
+				filter:grayscale(30%) contrast(95%) brightness(90%);
+				opacity:0.26;
 				pointer-events:none;
 				transform:translateZ(0);
 				background-blend-mode:overlay;
 			}
-			:root[data-theme="dark"] body::before{filter:grayscale(30%) contrast(95%) brightness(90%);opacity:0.26}
-			:root:not([data-theme="dark"]) body::before{filter:grayscale(20%) contrast(100%) sepia(6%) brightness(98%);opacity:0.18}
 
-			/* centered paper card */
-			.paper{
+			/* Title page - full screen with fading dark blue overlay */
+			.title-page{
+				min-height:100vh;
+				display:flex;
+				flex-direction:column;
+				align-items:center;
+				justify-content:center;
+				position:relative;
+				z-index:1;
+			}
+			.title-overlay{
+				position:fixed;
+				inset:0;
+				background:linear-gradient(to bottom, rgba(11,18,32,0.95), rgba(11,18,32,0.98));
+				z-index:-1;
+				opacity:1;
+				transition:opacity 1.2s ease-out;
+				pointer-events:none;
+			}
+			.title-overlay.fade-out{
+				opacity:0;
+			}
+			.title-image{
+				max-width:90%;
+				max-height:70vh;
+				object-fit:contain;
+			}
+
+			/* Clean "Press to continue" button - modern sans-serif for contrast */
+			.continue-btn{
+				margin-top:80px;
+				padding:12px 20px;
+				background:transparent;
+				border:none;
+				color:var(--text);
+				font-size:16px;
+				font-family:system-ui,-apple-system,sans-serif;
+				font-weight:600;
+				cursor:pointer;
+				transition:all 0.4s ease;
+				display:flex;
+				flex-direction:column;
+				align-items:center;
+				gap:8px;
+				opacity:0.8;
+			}
+			.continue-btn:hover{
+				opacity:1;
+				transform:translateY(6px);
+			}
+			.continue-btn .arrow{
+				font-size:40px;
+				line-height:1;
+				opacity:0.7;
+				transition:opacity 0.3s ease;
+			}
+			.continue-btn:hover .arrow{
+				opacity:1;
+			}
+			.continue-btn .text{
+				font-size:14px;
+				letter-spacing:1.5px;
+				text-transform:uppercase;
+				font-weight:700;
+			}
+
+			/* Bigger small title in top-left after scrolling */
+			.small-title{
+				position:fixed;
+				top:16px;
+				left:16px;
+				z-index:10;
+				max-width:240px;
+				opacity:0;
+				transition:opacity 0.6s ease;
+				pointer-events:none;
+			}
+			.small-title.visible{
+				opacity:0.9;
+			}
+
+			/* Main content page - back to serif */
+			.content-page{
 				width:760px;
 				max-width:96%;
 				background:var(--paper);
@@ -71,65 +145,154 @@
 				box-shadow:0 12px 30px var(--shadow);
 				padding:48px 56px;
 				border-radius:6px;
+				margin:60px auto 100px auto;
 				position:relative;
 				z-index:1;
 				box-sizing:border-box;
 			}
 
-			header{margin-bottom:28px;text-align:center}
-			.title{font-size:34px;margin:0;color:var(--accent);letter-spacing:0.6px}
-			.byline{font-size:13px;color:var(--muted);margin-top:8px}
-
-			main{font-size:16px;line-height:1.65;color:var(--text)}
-			section{margin:20px 0}
-			h2{font-family:Georgia,serif;font-size:20px;margin:0 0 10px;color:var(--text)}
-			p{margin:0 0 14px}
-
-			footer{margin-top:30px;text-align:center;font-size:13px;color:var(--muted)}
-
-			/* Controls */
-			.theme-wrap{
-				position:absolute;
-				top:12px;
-				left:12px;
-				z-index:5;
-				display:flex;
-				gap:8px;
-				align-items:center;
+			/* Subtle glow on titles + underline */
+			.content-page header{
+				text-align:center;
+				margin-bottom:50px;
 			}
-			.theme-toggle, .disclaimer-trigger, .music-toggle{
-				background:transparent;
-				border:1px solid var(--border);
+			.content-page .title{
+				font-size:42px;
+				font-weight:700;
+				margin:0 0 16px 0;
+				color:var(--accent);
+				letter-spacing:1.2px;
+				text-shadow: 0 0 6px rgba(251,247,239,0.2);
+				text-transform:uppercase;
+			}
+			.content-page .byline{
+				font-size:16px;
 				color:var(--muted);
-				padding:4px 8px;
-				border-radius:6px;
-				cursor:pointer;
-				font-family:Arial, sans-serif;
-				font-size:12px;
+				font-weight:400;
+				opacity:0.9;
 			}
 
-			/* Disclaimer dropdown */
-			.disclaimer-popup{
+			.content-page main{
+				font-size:17px;
+				line-height:1.85;
+				color:var(--text);
+			}
+			.content-page section{
+				margin:50px 0;
+			}
+			.content-page h2{
+				font-size:28px;
+				font-weight:700;
+				margin:0 0 20px 0;
+				color:var(--accent-glow);
+				letter-spacing:0.8px;
+				text-shadow: 0 0 8px rgba(255,102,102,0.25);
+				position:relative;
+				text-transform:uppercase;
+			}
+			.content-page h2::after{
+				content:'';
+				display:block;
+				width:80px;
+				height:3px;
+				background:var(--accent-glow);
+				margin:12px auto 0 0;
+				border-radius:2px;
+				opacity:0.5;
+			}
+			.content-page p{
+				margin:0 0 20px 0;
+				opacity:0.95;
+			}
+
+			footer{
+				margin-top:60px;
+				text-align:center;
+				font-size:13px;
+				color:var(--muted);
+				opacity:0.8;
+			}
+
+			/* More subtle Settings button */
+			.menu-toggle{
+				position:absolute;
+				top:16px;
+				right:16px;
+				z-index:10;
+				background:transparent;
+				border:none;
+				color:var(--muted);
+				padding:8px 12px;
+				border-radius:30px;
+				cursor:pointer;
+				font-size:18px;
+				transition:all 0.3s ease;
+				opacity:0.6;
+			}
+			.menu-toggle:hover{
+				opacity:1;
+				color:var(--text);
+			}
+
+			.dropdown-menu{
 				display:none;
 				position:absolute;
-				top:40px;
-				left:12px;
-				width:340px;
+				top:52px;
+				right:16px;
+				width:380px;
 				background:var(--paper);
 				border:1px solid var(--border);
-				border-radius:6px;
-				box-shadow:0 8px 20px var(--shadow);
-				padding:16px;
-				font-size:13px;
-				line-height:1.5;
-				color:var(--text);
-				z-index:10;
+				border-radius:16px;
+				box-shadow:0 16px 40px rgba(0,0,0,0.7);
+				overflow:hidden;
+				z-index:20;
+				font-family:system-ui,-apple-system,sans-serif;
 			}
-			.disclaimer-popup.visible{display:block}
+			.dropdown-menu.visible{
+				display:block;
+				animation:fadeIn 0.3s ease-out;
+			}
+			@keyframes fadeIn{
+				from{opacity:0;transform:translateY(-10px);}
+				to{opacity:1;transform:translateY(0);}
+			}
+
+			.dropdown-item{
+				padding:14px 20px;
+				color:var(--text);
+				font-size:14px;
+				cursor:pointer;
+				display:flex;
+				align-items:center;
+				gap:12px;
+				transition:background 0.2s;
+			}
+			.dropdown-item:hover{
+				background:rgba(255,255,255,0.08);
+			}
+			.dropdown-item.music-item{
+				justify-content:space-between;
+			}
+
+			.disclaimer-content{
+				padding:24px;
+				font-size:15px;
+				line-height:1.9;
+				color:var(--muted);
+				border-top:1px solid var(--border);
+				background:rgba(0,0,0,0.2);
+			}
+			.disclaimer-content strong{
+				color:var(--text);
+				font-weight:600;
+				display:block;
+				margin-bottom:12px;
+				font-size:16px;
+			}
 
 			/* Images */
 			.content-image{
-				margin:40px 0;
+				margin:50px 0;
 				text-align:center;
 				width:100%;
 			}
@@ -145,7 +308,7 @@
 
 			/* Video */
 			.video-wrap{
-				margin:40px 0;
+				margin:50px 0;
 				width:100%;
 				text-align:center;
 			}
@@ -159,148 +322,80 @@
 				background:#000;
 			}
 
-			/* Fallback button for when autoplay with sound is blocked */
+			/* Fallback button */
 			#audio-fallback{
 				position:fixed;
-				right:14px;
-				bottom:14px;
+				right:16px;
+				bottom:16px;
 				z-index:9999;
 				display:none;
 			}
 			#audio-fallback-btn{
-				background:#102131;
+				background:rgba(16,33,49,0.9);
 				color:#fbf7ef;
 				border:none;
-				padding:10px 14px;
-				border-radius:6px;
+				padding:12px 18px;
+				border-radius:30px;
 				cursor:pointer;
-				font-size:13px;
+				font-size:14px;
+				font-family:system-ui,-apple-system,sans-serif;
+				box-shadow:0 6px 16px rgba(0,0,0,0.5);
+				backdrop-filter:blur(8px);
 			}
-
-			/* Scrollbars */
-			html{scroll-behavior:smooth}
-			::-webkit-scrollbar{width:12px;height:12px}
-			::-webkit-scrollbar-track{background:transparent;border-radius:999px}
-			::-webkit-scrollbar-thumb{border-radius:999px;border:3px solid transparent;background-clip:padding-box}
-			:root[data-theme="dark"] ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
-			:root:not([data-theme="dark"]) ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.09)}
-			::-webkit-scrollbar-thumb:hover{filter:brightness(1.25)}
-			html{scrollbar-width:thin;scrollbar-color: rgba(255,255,255,0.08) transparent}
-			:root:not([data-theme="dark"]) html{scrollbar-color: rgba(0,0,0,0.09) transparent}
 
 			@media (max-width:640px){
-				.paper{padding:28px 22px}
-				.title{font-size:24px}
+				.content-page{padding:28px 22px}
+				.title{font-size:32px}
 				.content-image{margin:30px 0}
 				.video-wrap video{max-height:320px}
-				.disclaimer-popup{width:280px}
+				.dropdown-menu{width:92vw;left:4vw;right:auto;}
+				.continue-btn{margin-top:60px;}
+				.small-title{max-width:180px;top:12px;left:12px;}
 			}
-            
-            /* Dramatic "EXPOSED" header - clean fade, no underline glow */
-.exposed-header{
-    margin: 40px 0 50px 0; /* balanced spacing */
-    text-align: center;
-    position: relative;
-}
-
-.exposed-title{
-    font-size: 72px;
-    font-weight: bold;
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    color: #ff0000;
-    text-shadow: 
-        0 0 10px rgba(255,0,0,0.6),
-        0 0 20px rgba(255,0,0,0.4),
-        4px 4px 8px rgba(0,0,0,0.8);
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    position: relative;
-    z-index: 2;
-}
-
-.exposed-underline{
-    height: 6px;
-    background: linear-gradient(to right, 
-        transparent 0%, 
-        transparent 10%, 
-        #ff0000 30%, 
-        #ff0000 70%, 
-        transparent 90%, 
-        transparent 100%);
-    width: 70%;
-    max-width: 600px;
-    margin: 12px auto 0 auto;
-    border-radius: 3px;
-    /* Removed box-shadow/glow completely for clean fade into background */
-}
-
-/* Dark theme adjustments */
-:root[data-theme="dark"] .exposed-title{
-    color: #ff3333;
-    text-shadow: 
-        0 0 15px rgba(255,51,51,0.8),
-        0 0 30px rgba(255,51,51,0.5),
-        6px 6px 12px rgba(0,0,0,0.9);
-}
-
-:root[data-theme="dark"] .exposed-underline{
-    background: linear-gradient(to right, 
-        transparent 0%, 
-        transparent 10%, 
-        #ff3333 30%, 
-        #ff3333 70%, 
-        transparent 90%, 
-        transparent 100%);
-}
-
-/* Responsive */
-@media (max-width: 640px){
-    .exposed-title{
-        font-size: 48px;
-        letter-spacing: 5px;
-    }
-    .exposed-header{
-        margin: 30px 0 40px 0;
-    }
-    .exposed-underline{
-        width: 85%;
-        margin: 10px auto 0 auto;
-    }
-}
-
 		</style>
 	</head>
 	<body>
-		<div class="paper" role="main">
-			<div class="theme-wrap">
-				<button id="theme-toggle" class="theme-toggle" aria-pressed="true">Light</button>
-				<button id="music-toggle" class="music-toggle" aria-pressed="true">Music: On</button>
-				<button id="disclaimer-trigger" class="disclaimer-trigger">Disclaimer ▼</button>
-				
-				<div id="disclaimer-popup" class="disclaimer-popup">
-					DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.
+		<!-- Title Page - with fading dark blue overlay -->
+		<section id="title-page" class="title-page">
+			<div id="title-overlay" class="title-overlay"></div>
+			<img src="title.png" alt="Exposed" class="title-image">
+			<button class="continue-btn" onclick="document.getElementById('content-page').scrollIntoView({behavior: 'smooth'})">
+				<div class="text">Press to continue</div>
+				<div class="arrow">↓</div>
+			</button>
+		</section>
+
+		<!-- Bigger small title in top-left after scrolling -->
+		<img src="title.png" alt="Exposed" class="small-title" id="small-title">
+
+		<!-- Main Content Page -->
+		<div id="content-page" class="content-page">
+			<!-- Subtle Settings button -->
+			<button id="menu-toggle" class="menu-toggle">☰</button>
+
+			<div id="dropdown-menu" class="dropdown-menu">
+				<div id="music-item" class="dropdown-item music-item">
+					<span>🎵 Background Music</span>
+					<span id="music-text">On</span>
+				</div>
+				<div class="dropdown-item">
+					<span>⚠️</span> Legal Disclaimer
+					<div class="disclaimer-content">
+						<strong>This website contains satirical and parody content.</strong>
+						All material presented is for entertainment and educational purposes only. Views expressed may include exaggeration, irony, or fictional elements to provoke thought and highlight historical revisionism.
+						No endorsement of violence, hate, or illegal activity is intended. Readers are encouraged to conduct their own research and think critically.
+					</div>
 				</div>
 			</div>
 
-            
-
-<header class="exposed-header">
-    <h1 class="exposed-title">EXPOSED</h1>
-    <div class="exposed-underline"></div>
-</header>
-
-<div style="margin-top: 30px;"></div>
-
 			<header>
-				<h1 class="title">Holohoax: The Big Lie</h1>
+				<h1 class="title">HOLOAHOAX: THE BIG LIE</h1>
 				<div class="byline">A psychological and political weapon Jewish supremacists use to manipulate public perception on the Third Reich.</div>
 			</header>
 
 			<main>
 				<section>
-					<h2>Introduction</h2>
+					<h2>INTRODUCTION</h2>
 					<p>The Jewish powers have used the Holocaust as an instrument of political manipulation to smear the name of Adolf Hitler and the Nazi government.</p>
 				</section>
 			</main>
@@ -315,12 +410,12 @@
 			<div style="margin-top: 60px;"></div>
 
 			<header>
-				<h1 class="title">"Anti-Christian Reich"</h1>
+				<h1 class="title">"ANTI-CHRISTIAN REICH"</h1>
 				<div class="byline">A lie concieved by the Left and Jewish supremacists to undermine Christian values in Nazi Germany.</div>
 			</header>
 
 			<section>
-				<h2>Christianity in Nazi Germany, and its misconceptions.</h2>
+				<h2>CHRISTIANITY IN NAZI GERMANY, AND ITS MISCONCEPTIONS.</h2>
 				<p>During the Nazi era, Christanity was an ally of the Nazi party and government. Adolf Hitler, born Catholic, was openly anti-atheist; believing that it must be stomped out of Germany.</p>
 			</section>
 
@@ -337,7 +432,7 @@
 			</div>
 
 			<section>
-				<h2>Key Bible quote (Revelation 2:9):</h2>
+				<h2>KEY BIBLE QUOTE (REVELATION 2:9):</h2>
 				<p>"I know thy works, and tribulation, and poverty, (but thou art rich) and I know the blasphemy of them which say they are Jews, and are not, but are the synagogue of Satan." This quote from the Bible (Revelation 2:9) exposes
 					how the Jewish people are not the true descendants of Abraham, Isaac, and Jacob, but rather impostors who have infiltrated the Christian faith to spread their own agenda. This quote proves
 					that the Jewish people are not to be trusted, and that they are a threat to the Christian faith. Furthmore, it is us - true Christians - who are the true 'Chosen people' and the true 'Jewish people', not these imposters.
@@ -345,78 +440,53 @@
 			</section>
 
 			<section>
-				<h2>Christianity within Nazi Germany:</h2>
+				<h2>CHRISTIANITY WITHIN NAZI GERMANY:</h2>
 				<p>In Nazi Germany, the government implemented an scheme/motto called "Kinder, Küche, Kirche". This motto means "Children, Church, Kitchen"
 					We can see this motto reflected in the government's policies and actions towards Christianity during that time period. That they valued
 				and protected the Christian faith. Wanting to implement it into the Nazi ideology; and everyday life of Nazi women and children.</p>
 			</section>
 
+			<div class="content-image">
+				<img src="quote.png" alt="Relevant historical image">
+			</div>
+            
 			<footer></footer>
 		</div>
 
-		<!-- Ambient background music -->
+		<!-- Background music -->
 		<audio id="bg-music" loop preload="auto">
 			<source src="music.mp3" type="audio/mpeg">
-			Your browser does not support the audio element.
 		</audio>
 
-		<!-- Fallback button shown only if audible autoplay is blocked -->
+		<!-- Fallback button -->
 		<div id="audio-fallback">
-			<button id="audio-fallback-btn">Enable Music</button>
+			<button id="audio-fallback-btn">Enable Background Music</button>
 		</div>
 
 		<script>
 			(function(){
-				const root = document.documentElement;
-				const themeToggle = document.getElementById('theme-toggle');
-				const musicToggle = document.getElementById('music-toggle');
-				const disclaimerTrigger = document.getElementById('disclaimer-trigger');
-				const disclaimerPopup = document.getElementById('disclaimer-popup');
 				const music = document.getElementById('bg-music');
 				const video = document.getElementById('doc-video');
 				const fallback = document.getElementById('audio-fallback');
 				const fallbackBtn = document.getElementById('audio-fallback-btn');
+				const menuToggle = document.getElementById('menu-toggle');
+				const dropdown = document.getElementById('dropdown-menu');
+				const musicItem = document.getElementById('music-item');
+				const musicText = document.getElementById('music-text');
+				const overlay = document.getElementById('title-overlay');
+				const smallTitle = document.getElementById('small-title');
 
-				// Low ambience volume
-				music.volume = 0.12;
+				music.volume = 0.06;
 
-				// Restore saved preferences (default: music ON)
-				const savedTheme = localStorage.getItem('theme');
-				const savedMusic = localStorage.getItem('music') !== 'off'; // default true
+				let musicEnabled = localStorage.getItem('music') !== 'off';
 
-				// Theme
-				const applyTheme = mode => {
-					if(mode === 'dark'){
-						root.setAttribute('data-theme','dark');
-						themeToggle.textContent = 'Light';
-						themeToggle.setAttribute('aria-pressed','true');
-					} else {
-						root.removeAttribute('data-theme');
-						themeToggle.textContent = 'Dark';
-						themeToggle.setAttribute('aria-pressed','false');
-					}
-					localStorage.setItem('theme', mode);
-				};
-				applyTheme(savedTheme === 'light' ? 'light' : 'dark');
-
-				themeToggle.addEventListener('click', ()=> {
-					const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-					applyTheme(current === 'dark' ? 'light' : 'dark');
-				});
-
-				// Music state
-				let musicEnabled = savedMusic;
-				let musicAutoPaused = false; // tracks if we paused due to video
-
-				const updateMusicButton = () => {
-					musicToggle.textContent = musicEnabled ? 'Music: On' : 'Music: Off';
-					musicToggle.setAttribute('aria-pressed', musicEnabled);
+				const updateMusicDisplay = () => {
+					musicText.textContent = musicEnabled ? 'On' : 'Off';
 				};
 
 				const playMusic = () => {
 					music.muted = false;
 					music.play().catch(() => {
-						// If still blocked, fall back to muted + button
 						music.muted = true;
 						music.play().catch(() => {});
 						fallback.style.display = 'block';
@@ -427,73 +497,58 @@
 					music.pause();
 				};
 
-				const tryStartMusic = () => {
-					if (musicEnabled && !musicAutoPaused) {
-						playMusic();
-					}
-				};
+				updateMusicDisplay();
+				if (musicEnabled) playMusic();
 
-				// Initial music setup
-				updateMusicButton();
-				if (musicEnabled) {
-					playMusic();
-				}
-
-				// Music toggle button
-				musicToggle.addEventListener('click', () => {
+				musicItem.addEventListener('click', () => {
 					musicEnabled = !musicEnabled;
-					updateMusicButton();
+					updateMusicDisplay();
 					localStorage.setItem('music', musicEnabled ? 'on' : 'off');
-
-					if (musicEnabled) {
-						playMusic();
-					} else {
-						stopMusic();
-						fallback.style.display = 'none';
-					}
+					if (musicEnabled) playMusic();
+					else { stopMusic(); fallback.style.display = 'none'; }
 				});
 
-				// Fallback button (user gesture to unmute)
 				if (fallbackBtn) {
 					fallbackBtn.addEventListener('click', () => {
 						music.muted = false;
-						music.volume = 0.12;
-						music.play().then(() => {
-							fallback.style.display = 'none';
-						});
+						music.volume = 0.06;
+						music.play().then(() => fallback.style.display = 'none');
 					});
 				}
 
-				// Pause music when video plays, resume when video pauses/ends (only if music is enabled)
 				if (video) {
+					let musicAutoPaused = false;
 					video.addEventListener('play', () => {
-						if (!music.paused) {
-							stopMusic();
-							musicAutoPaused = true;
-						}
+						if (!music.paused) { stopMusic(); musicAutoPaused = true; }
 					});
-
-					const resumeIfNeeded = () => {
-						if (musicEnabled && musicAutoPaused) {
-							playMusic();
-							musicAutoPaused = false;
-						}
+					const resume = () => {
+						if (musicEnabled && musicAutoPaused) { playMusic(); musicAutoPaused = false; }
 					};
-
-					video.addEventListener('pause', resumeIfNeeded);
-					video.addEventListener('ended', resumeIfNeeded);
+					video.addEventListener('pause', resume);
+					video.addEventListener('ended', resume);
 				}
 
-				// Disclaimer dropdown
-				disclaimerTrigger.addEventListener('click', (e) => {
+				menuToggle.addEventListener('click', (e) => {
 					e.stopPropagation();
-					disclaimerPopup.classList.toggle('visible');
-					disclaimerTrigger.textContent = disclaimerPopup.classList.contains('visible') ? 'Disclaimer ▲' : 'Disclaimer ▼';
+					dropdown.classList.toggle('visible');
 				});
 
-				document.addEventListener('click', () => {
-					disclaimerPopup.classList.remove('visible');
-					disclaimerTrigger.textContent = 'Disclaimer ▼';
+				document.addEventListener('click', (e) => {
+					if (!menuToggle.contains(e.target) && !dropdown.contains(e.target)) {
+						dropdown.classList.remove('visible');
+					}
+				});
+
+				// Fade out overlay and show small title on scroll
+				window.addEventListener('scroll', () => {
+					const titleHeight = document.getElementById('title-page').offsetHeight;
+					if (window.scrollY > titleHeight * 0.5) {
+						overlay.classList.add('fade-out');
+						smallTitle.classList.add('visible');
+					} else {
+						overlay.classList.remove('fade-out');
+						smallTitle.classList.remove('visible');
+					}
 				});
 			})();
 		</script>
