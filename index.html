@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>Exposed</title>
+        <link rel="icon" href="tabimage.webp" type="image/webp">
 		<style>
 			/* Paper-like documentary layout with dark background default */
 			:root{
@@ -194,6 +195,81 @@
 				.video-wrap video{max-height:320px}
 				.disclaimer-popup{width:280px}
 			}
+            
+            /* Dramatic "EXPOSED" header - clean fade, no underline glow */
+.exposed-header{
+    margin: 40px 0 50px 0; /* balanced spacing */
+    text-align: center;
+    position: relative;
+}
+
+.exposed-title{
+    font-size: 72px;
+    font-weight: bold;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: #ff0000;
+    text-shadow: 
+        0 0 10px rgba(255,0,0,0.6),
+        0 0 20px rgba(255,0,0,0.4),
+        4px 4px 8px rgba(0,0,0,0.8);
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.exposed-underline{
+    height: 6px;
+    background: linear-gradient(to right, 
+        transparent 0%, 
+        transparent 10%, 
+        #ff0000 30%, 
+        #ff0000 70%, 
+        transparent 90%, 
+        transparent 100%);
+    width: 70%;
+    max-width: 600px;
+    margin: 12px auto 0 auto;
+    border-radius: 3px;
+    /* Removed box-shadow/glow completely for clean fade into background */
+}
+
+/* Dark theme adjustments */
+:root[data-theme="dark"] .exposed-title{
+    color: #ff3333;
+    text-shadow: 
+        0 0 15px rgba(255,51,51,0.8),
+        0 0 30px rgba(255,51,51,0.5),
+        6px 6px 12px rgba(0,0,0,0.9);
+}
+
+:root[data-theme="dark"] .exposed-underline{
+    background: linear-gradient(to right, 
+        transparent 0%, 
+        transparent 10%, 
+        #ff3333 30%, 
+        #ff3333 70%, 
+        transparent 90%, 
+        transparent 100%);
+}
+
+/* Responsive */
+@media (max-width: 640px){
+    .exposed-title{
+        font-size: 48px;
+        letter-spacing: 5px;
+    }
+    .exposed-header{
+        margin: 30px 0 40px 0;
+    }
+    .exposed-underline{
+        width: 85%;
+        margin: 10px auto 0 auto;
+    }
+}
+
 		</style>
 	</head>
 	<body>
@@ -207,6 +283,15 @@
 					DISCLAIMER: This content is satirical parody for entertainment purposes only. It may include exaggerated themes of racism, antisemitism, anti-LGBT sentiment, violence, or threats purely for shock value and humor. By continuing, you acknowledge its fictional, satirical nature and agree not to interpret or use it outside this context. Satire challenges norms through exaggeration and is not intended to harm or endorse any views.
 				</div>
 			</div>
+
+            
+
+<header class="exposed-header">
+    <h1 class="exposed-title">EXPOSED</h1>
+    <div class="exposed-underline"></div>
+</header>
+
+<div style="margin-top: 30px;"></div>
 
 			<header>
 				<h1 class="title">Holohoax: The Big Lie</h1>
