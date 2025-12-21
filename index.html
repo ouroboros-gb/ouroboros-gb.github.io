@@ -30,7 +30,7 @@
 				--text:#fbf7ef;
 				--muted:#fbf7efaa;
 				--accent:#fbf7ef;
-				--accent-glow:#ff6666;
+				--accent-glow:#ff8888;
 				--border:#102131;
 				--shadow:rgba(0,0,0,0.6);
 			}
@@ -138,7 +138,7 @@
 				font-weight:700;
 			}
 
-			/* Main content page - no extra top padding needed now */
+			/* Main content page */
 			.content-page{
 				width:760px;
 				max-width:96%;
@@ -153,58 +153,64 @@
 				box-sizing:border-box;
 			}
 
-			/* Subtle glow on titles + underline */
+			/* Improved titles - serif, larger, better spacing, subtle emphasis */
 			.content-page header{
 				text-align:center;
-				margin-bottom:50px;
+				margin-bottom:60px;
 			}
 			.content-page .title{
-				font-size:42px;
+				font-size:48px;
 				font-weight:700;
-				margin:0 0 16px 0;
+				margin:0 0 20px 0;
 				color:var(--accent);
-				letter-spacing:1.2px;
-				text-shadow: 0 0 6px rgba(251,247,239,0.2);
-				text-transform:uppercase;
+				letter-spacing:2px;
+				line-height:1.2;
+				text-transform:none; /* removed uppercase for natural look */
 			}
 			.content-page .byline{
-				font-size:16px;
+				font-size:17px;
 				color:var(--muted);
 				font-weight:400;
+				font-style:italic;
 				opacity:0.9;
+				max-width:80%;
+				margin:0 auto;
 			}
 
 			.content-page main{
-				font-size:17px;
-				line-height:1.85;
+				font-size:18px;
+				line-height:1.9;
 				color:var(--text);
 			}
 			.content-page section{
-				margin:50px 0;
+				margin:60px 0;
 			}
 			.content-page h2{
-				font-size:28px;
+				font-size:32px;
 				font-weight:700;
-				margin:0 0 20px 0;
-				color:var(--accent-glow);
-				letter-spacing:0.8px;
-				text-shadow: 0 0 8px rgba(255,102,102,0.25);
+				margin:0 0 24px 0;
+				color:var(--accent);
+				letter-spacing:1.2px;
+				line-height:1.3;
+				text-transform:none; /* removed uppercase */
 				position:relative;
-				text-transform:uppercase;
+				padding-bottom:12px;
 			}
 			.content-page h2::after{
 				content:'';
-				display:block;
-				width:80px;
+				position:absolute;
+				left:0;
+				bottom:0;
+				width:100px;
 				height:3px;
 				background:var(--accent-glow);
-				margin:12px auto 0 0;
 				border-radius:2px;
-				opacity:0.5;
+				opacity:0.6;
 			}
 			.content-page p{
-				margin:0 0 20px 0;
+				margin:0 0 24px 0;
 				opacity:0.95;
+				text-align:justify;
 			}
 
 			/* Credits at the bottom */
@@ -305,7 +311,7 @@
 
 			/* Images */
 			.content-image{
-				margin:50px 0;
+				margin:60px 0;
 				text-align:center;
 				width:100%;
 			}
@@ -321,14 +327,14 @@
 
 			/* Video */
 			.video-wrap{
-				margin:50px 0;
+				margin:60px 0;
 				width:100%;
 				text-align:center;
 			}
 			.video-wrap video{
 				max-width:100%;
 				height:auto;
-				max-height:400px;
+				max-height:450px;
 				border:1px solid var(--border);
 				border-radius:6px;
 				box-shadow:0 10px 24px var(--shadow);
@@ -357,9 +363,10 @@
 			}
 
 			@media (max-width:640px){
-				.content-page{padding:28px 22px}
-				.title{font-size:32px}
-				.content-image{margin:30px 0}
+				.content-page{padding:32px 24px}
+				.title{font-size:36px}
+				h2{font-size:26px}
+				.content-image{margin:40px 0}
 				.video-wrap video{max-height:320px}
 				.dropdown-menu{width:92vw;left:4vw;right:auto;}
 				.continue-btn{margin-top:60px;}
@@ -398,13 +405,13 @@
 			</div>
 
 			<header>
-				<h1 class="title">HOLOAHOAX: THE BIG LIE</h1>
+				<h1 class="title">Holohoax: The Big Lie</h1>
 				<div class="byline">A psychological and political weapon Jewish supremacists use to manipulate public perception on the Third Reich.</div>
 			</header>
 
 			<main>
 				<section>
-					<h2>INTRODUCTION</h2>
+					<h2>Introduction</h2>
 					<p>The Jewish powers have used the Holocaust as an instrument of political manipulation to smear the name of Adolf Hitler and the Nazi government.</p>
 				</section>
 			</main>
@@ -416,8 +423,8 @@
 				</video>
 			</div>
 
-                        			<div class="content-image">
-				<img src="proof.png" alt="Relevant historical image">
+			<div class="content-image">
+				<img src="proof.png" alt="Red Cross document showing estimated deaths">
 			</div>
 
 			<section>
@@ -431,13 +438,13 @@
 			<div style="margin-top: 60px;"></div>
 
 			<header>
-				<h1 class="title">"ANTI-CHRISTIAN REICH"</h1>
-				<div class="byline">A lie concieved by the Left and Jewish supremacists to undermine Christian values in Nazi Germany.</div>
+				<h1 class="title">"Anti-Christian Reich"</h1>
+				<div class="byline">A lie conceived by the Left and Jewish supremacists to undermine Christian values in Nazi Germany.</div>
 			</header>
 
 			<section>
-				<h2>CHRISTIANITY IN NAZI GERMANY, AND ITS MISCONCEPTIONS.</h2>
-				<p>During the Nazi era, Christanity was an ally of the Nazi party and government. Adolf Hitler, born Catholic, was openly anti-atheist; believing that it must be stomped out of Germany.</p>
+				<h2>Christianity in Nazi Germany, and its misconceptions.</h2>
+				<p>During the Nazi era, Christianity was an ally of the Nazi party and government. Adolf Hitler, born Catholic, was openly anti-atheist; believing that it must be stomped out of Germany.</p>
 			</section>
 
 			<div class="content-image">
@@ -453,16 +460,16 @@
 			</div>
 
 			<section>
-				<h2>KEY BIBLE QUOTE (REVELATION 2:9):</h2>
+				<h2>Key Bible quote (Revelation 2:9):</h2>
 				<p>"I know thy works, and tribulation, and poverty, (but thou art rich) and I know the blasphemy of them which say they are Jews, and are not, but are the synagogue of Satan." This quote from the Bible (Revelation 2:9) exposes
 					how the Jewish people are not the true descendants of Abraham, Isaac, and Jacob, but rather impostors who have infiltrated the Christian faith to spread their own agenda. This quote proves
-					that the Jewish people are not to be trusted, and that they are a threat to the Christian faith. Furthmore, it is us - true Christians - who are the true 'Chosen people' and the true 'Jewish people', not these imposters.
+					that the Jewish people are not to be trusted, and that they are a threat to the Christian faith. Furthermore, it is us - true Christians - who are the true 'Chosen people' and the true 'Jewish people', not these imposters.
 				</p>
 			</section>
 
 			<section>
-				<h2>CHRISTIANITY WITHIN NAZI GERMANY:</h2>
-				<p>In Nazi Germany, the government implemented an scheme/motto called "Kinder, Küche, Kirche". This motto means "Children, Church, Kitchen"
+				<h2>Christianity within Nazi Germany:</h2>
+				<p>In Nazi Germany, the government implemented a scheme/motto called "Kinder, Küche, Kirche". This motto means "Children, Church, Kitchen".
 					We can see this motto reflected in the government's policies and actions towards Christianity during that time period. That they valued
 				and protected the Christian faith. Wanting to implement it into the Nazi ideology; and everyday life of Nazi women and children.</p>
 			</section>
@@ -470,7 +477,6 @@
 			<div class="content-image">
 				<img src="quote.png" alt="Relevant historical image">
 			</div>
-
 
 			<!-- Credits -->
 			<div class="credits">
@@ -554,7 +560,7 @@
 					video.addEventListener('ended', resume);
 				}
 
-				menuToggle.addEventListener('click', (e) => {
+				menuToggle.addEventListener('click', () => {
 					e.stopPropagation();
 					dropdown.classList.toggle('visible');
 				});
@@ -565,7 +571,7 @@
 					}
 				});
 
-				// Only fade out overlay on scroll (no small title anymore)
+				// Fade out overlay on scroll
 				window.addEventListener('scroll', () => {
 					const titleHeight = document.getElementById('title-page').offsetHeight;
 					if (window.scrollY > titleHeight * 0.5) {
@@ -578,4 +584,3 @@
 		</script>
 	</body>
 </html>
-
