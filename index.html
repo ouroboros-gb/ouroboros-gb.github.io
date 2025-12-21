@@ -138,29 +138,14 @@
 				font-weight:700;
 			}
 
-			/* Bigger small title in top-left after scrolling */
-			.small-title{
-				position:fixed;
-				top:16px;
-				left:16px;
-				z-index:10;
-				max-width:240px;
-				opacity:0;
-				transition:opacity 0.6s ease;
-				pointer-events:none;
-			}
-			.small-title.visible{
-				opacity:0.9;
-			}
-
-			/* Main content page */
+			/* Main content page - no extra top padding needed now */
 			.content-page{
 				width:760px;
 				max-width:96%;
 				background:var(--paper);
 				border:1px solid var(--border);
 				box-shadow:0 12px 30px var(--shadow);
-				padding:48px 56px;
+				padding:48px 56px 80px 56px;
 				border-radius:6px;
 				margin:60px auto 100px auto;
 				position:relative;
@@ -222,12 +207,23 @@
 				opacity:0.95;
 			}
 
-			footer{
-				margin-top:60px;
+			/* Credits at the bottom */
+			.credits{
+				margin-top:80px;
+				padding-top:40px;
+				border-top:1px solid var(--border);
 				text-align:center;
-				font-size:13px;
+				font-size:14px;
 				color:var(--muted);
 				opacity:0.8;
+			}
+			.credits a{
+				color:var(--text);
+				text-decoration:underline;
+				opacity:0.9;
+			}
+			.credits a:hover{
+				opacity:1;
 			}
 
 			/* More subtle Settings button */
@@ -367,7 +363,6 @@
 				.video-wrap video{max-height:320px}
 				.dropdown-menu{width:92vw;left:4vw;right:auto;}
 				.continue-btn{margin-top:60px;}
-				.small-title{max-width:180px;top:12px;left:12px;}
 			}
 		</style>
 	</head>
@@ -381,9 +376,6 @@
 				<div class="arrow">↓</div>
 			</button>
 		</section>
-
-		<!-- Bigger small title in top-left after scrolling -->
-		<img src="title.png" alt="Exposed" class="small-title" id="small-title">
 
 		<!-- Main Content Page -->
 		<div id="content-page" class="content-page">
@@ -466,6 +458,12 @@
 			<div class="content-image">
 				<img src="quote.png" alt="Relevant historical image">
 			</div>
+
+			<!-- Credits -->
+			<div class="credits">
+				Website created and maintained by Ouroboros.<br>
+				Contact: <a href="https://discord.com/">@bor_at</a>
+			</div>
             
 			<footer></footer>
 		</div>
@@ -491,7 +489,6 @@
 				const musicItem = document.getElementById('music-item');
 				const musicText = document.getElementById('music-text');
 				const overlay = document.getElementById('title-overlay');
-				const smallTitle = document.getElementById('small-title');
 
 				music.volume = 0.06;
 
@@ -556,15 +553,13 @@
 					}
 				});
 
-				// Fade out overlay and show small title on scroll
+				// Only fade out overlay on scroll (no small title anymore)
 				window.addEventListener('scroll', () => {
 					const titleHeight = document.getElementById('title-page').offsetHeight;
 					if (window.scrollY > titleHeight * 0.5) {
 						overlay.classList.add('fade-out');
-						smallTitle.classList.add('visible');
 					} else {
 						overlay.classList.remove('fade-out');
-						smallTitle.classList.remove('visible');
 					}
 				});
 			})();
