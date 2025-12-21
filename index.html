@@ -6,7 +6,7 @@
 		<title>Exposed</title>
         <link rel="icon" href="tabimage.webp" type="image/webp">
 
-		<!-- Open Graph / Social Media Preview Tags - Updated description -->
+		<!-- Open Graph / Social Media Preview Tags -->
 		<meta property="og:title" content="Exposed">
 		<meta property="og:description" content="Exposed - Exposing the Jewish and Left lies on the Third Reich and Christianity.">
 		<meta property="og:image" content="https://ouroboros-gb.github.io/title.png">
@@ -138,7 +138,7 @@
 				font-weight:700;
 			}
 
-			/* Main content page */
+			/* Main content page - no extra top padding needed now */
 			.content-page{
 				width:760px;
 				max-width:96%;
@@ -416,6 +416,18 @@
 				</video>
 			</div>
 
+                        			<div class="content-image">
+				<img src="proof.png" alt="Relevant historical image">
+			</div>
+
+			<section>
+				<p>Here you can see an official Red Cross document, based on the Bad Arolsen documents captured by the Russians and their own records. In 1984 the Red Cross estimated the TOTAL number of deaths for ALL prisoners.
+                    Including but not limited to Jews. In Nazi concentrations camps to be 373,468. This number is a far cry from the 6 million figure pushed by Jewish supremacists and the Left. The authenticity
+                    of the Red Cross estimated was later confirmed in 1990 when the International Tracing Service (ITS) opened its archives to the public. The ITS is the modern name for the Bad Arolsen archives.
+                    Verified at the trial of Ernst Zundel in 1988, where the defense presented the Red Cross document as evidence. The judge however dismissed the evidence and refused to acknowledge it.
+                </p>
+			</section>
+
 			<div style="margin-top: 60px;"></div>
 
 			<header>
@@ -459,9 +471,10 @@
 				<img src="quote.png" alt="Relevant historical image">
 			</div>
 
+
 			<!-- Credits -->
 			<div class="credits">
-				Website created and maintained by Ouroboros.<br>
+				Website created and maintained by Ouroboros. Credit to holocaust101 for resources.<br>
 				Contact: <a href="https://discord.com/">@bor_at</a>
 			</div>
             
@@ -553,7 +566,7 @@
 					}
 				});
 
-				// Fade out overlay on scroll
+				// Only fade out overlay on scroll (no small title anymore)
 				window.addEventListener('scroll', () => {
 					const titleHeight = document.getElementById('title-page').offsetHeight;
 					if (window.scrollY > titleHeight * 0.5) {
