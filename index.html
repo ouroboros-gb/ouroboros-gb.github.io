@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Exposed</title>
+        <link rel="icon" href="tabimage.webp" type="image/webp">
+
+		<!-- Open Graph / Social Media Preview Tags -->
+		<meta property="og:title" content="Exposed">
+		<meta property="og:description" content="Exposed - Exposing the Jewish and Left lies on the Third Reich and Christianity.">
+		<meta property="og:image" content="https://ouroboros-gb.github.io/title.png">
+		<meta property="og:image:alt" content="Exposed - Shattered Star with Cross Logo">
+		<meta property="og:url" content="https://ouroboros-gb.github.io/">
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Exposed">
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="Exposed">
+		<meta name="twitter:description" content="Exposed - Exposing the Jewish and Left lies on the Third Reich and Christianity.">
+		<meta name="twitter:image" content="https://ouroboros-gb.github.io/title.png">
+		<meta name="twitter:image:alt" content="Exposed - Shattered Star with Cross Logo">
+
+		<style>
+			:root{
+				--bg:#0b1220;
+				--paper:#0b1220;
+				--text:#fbf7ef;
+				--muted:#fbf7efaa;
+				--accent:#fbf7ef;
+				--accent-glow:#ff8888;
+				--border:#102131;
+				--shadow:rgba(0,0,0,0.6);
+			}
+
+			html,body{margin:0;padding:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",Times,serif;overflow-x:hidden;scroll-behavior:smooth}
+			body{display:flex;flex-direction:column}
+			html::-webkit-scrollbar{display:none}
+			html{-ms-overflow-style:none;scrollbar-width:none}
+
+			body::before{content:"";position:fixed;inset:0;z-index:0;background-image:url('image.jpg');background-size:cover;background-position:center;filter:grayscale(30%) contrast(95%) brightness(90%);opacity:0.26}
+
+			.title-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1}
+			.title-overlay{position:fixed;inset:0;background:linear-gradient(to bottom,rgba(11,18,32,0.95),rgba(11,18,32,0.98));z-index:-1;opacity:1;transition:opacity 1.2s;pointer-events:none}
+			.title-overlay.fade-out{opacity:0}
+			.title-image{max-width:90%;max-height:70vh;object-fit:contain}
+
+			/* "Enter Site" button - fades out on scroll */
+			.continue-btn{
+				margin-top:80px;
+				padding:12px 20px;
+				background:transparent;
+				border:none;
+				color:var(--text);
+				font-size:16px;
+				font-family:system-ui,sans-serif;
+				font-weight:600;
+				cursor:pointer;
+				display:flex;
+				flex-direction:column;
+				align-items:center;
+				gap:8px;
+				opacity:0.8;
+				transition:all 0.8s ease;
+				z-index:2;
+			}
+			.continue-btn.hidden{
+				opacity:0;
+				pointer-events:none;
+			}
+			.continue-btn:hover{opacity:1;transform:translateY(6px)}
+			.continue-btn .arrow{font-size:40px;opacity:0.7;transition:0.3s}
+			.continue-btn:hover .arrow{opacity:1}
+			.continue-btn .text{font-size:14px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+
+			/* Navigation Bar - appears after intro */
+			.nav-bar{
+				position:fixed;
+				top:0;
+				left:0;
+				right:0;
+				background:rgba(11,18,32,0.9);
+				backdrop-filter:blur(10px);
+				z-index:20;
+				padding:12px 20px;
+				display:flex;
+				justify-content:center;
+				gap:30px;
+				opacity:0;
+				transition:opacity 0.6s ease;
+				border-bottom:1px solid var(--border);
+			}
+			.nav-bar.visible{opacity:1}
+			.nav-bar a{
+				color:var(--text);
+				text-decoration:none;
+				font-size:16px;
+				font-weight:600;
+				text-transform:uppercase;
+				letter-spacing:1px;
+				transition:0.3s;
+			}
+			.nav-bar a:hover{color:var(--accent-glow)}
+
+			.content-page{
+				width:760px;max-width:96%;background:var(--paper);border:1px solid var(--border);box-shadow:0 12px 30px var(--shadow);padding:48px 56px 80px;border-radius:6px;margin:60px auto 100px;position:relative;z-index:1;box-sizing:border-box;
+			}
+
+			/* Smaller, less vibrant credits */
+			.credits{
+				margin-top:100px;
+				text-align:center;
+				font-size:12px;
+				color:var(--muted);
+				opacity:0.6;
+				line-height:1.6;
+			}
+			.credits a{
+				color:var(--muted);
+				text-decoration:none;
+				transition:0.3s;
+			}
+			.credits a:hover{
+				color:var(--text);
+				opacity:0.8;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Navigation (hidden on intro, appears on scroll) -->
+		<nav class="nav-bar" id="nav-bar">
+			<a href="index.html">Home</a>
+			<a href="holohoax.html">The Holohoax</a>
+			<a href="christianity.html">Christianity & The Reich</a>
+			<a href="bolshevik.html">Jewish Bolshevik Atrocities</a>
+			<a href="quotes.html">Quotes</a>
+			<a href="timeline.html">Timeline</a>
+			<a href="objections.html">Common Objections</a>
+		</nav>
+
+		<!-- Intro Title Screen -->
+		<section id="title-page" class="title-page">
+			<div id="title-overlay" class="title-overlay"></div>
+			<img src="title.png" alt="Exposed" class="title-image">
+			<button id="continue-btn" class="continue-btn">
+				<div class="text">Enter Site</div>
+				<div class="arrow">↓</div>
+			</button>
+		</section>
+
+		<!-- Brief Overview / Teaser on Home Page -->
+		<div id="overview" class="content-page">
+			<header>
+				<h1 class="title"></h1>
+				<div class="byline"></div>
+			</header>
+			<p style="font-size:18px;text-align:center;margin:40px 0">
+				A resource dedicated to historical truth and revisionism.<br>
+				Explore the evidence challenging mainstream narratives.
+			</p>
+			<div class="credits">
+				Website created and maintained by Ouroboros. Credit to holocaust101 for resources.<br>
+			</div>
+		</div>
+
+		<!-- Background music & fallback -->
+		<audio id="bg-music" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
+		<div id="audio-fallback"><button id="audio-fallback-btn">Enable Background Music</button></div>
+
+		<script>
+			const overlay = document.getElementById('title-overlay');
+			const nav = document.getElementById('nav-bar');
+			const continueBtn = document.getElementById('continue-btn');
+
+			window.addEventListener('scroll', () => {
+				const titleHeight = document.getElementById('title-page').offsetHeight;
+				const scrollY = window.scrollY;
+
+				if (scrollY > titleHeight * 0.3) {
+					overlay.classList.add('fade-out');
+					nav.classList.add('visible');
+					continueBtn.classList.add('hidden');
+				} else {
+					overlay.classList.remove('fade-out');
+					nav.classList.remove('visible');
+					continueBtn.classList.remove('hidden');
+				}
+			});
+
+			// Optional: smooth scroll on button click
+			document.getElementById('continue-btn').addEventListener('click', () => {
+				document.getElementById('overview').scrollIntoView({behavior: 'smooth'});
+			});
+
+			// Music code (your existing)
+			(function(){
+				const music = document.getElementById('bg-music');
+				const fallback = document.getElementById('audio-fallback');
+				const fallbackBtn = document.getElementById('audio-fallback-btn');
+
+				music.volume = 0.06;
+				let musicEnabled = localStorage.getItem('music') !== 'off';
+
+				const playMusic = () => {
+					music.muted = false;
+					music.play().catch(() => {
+						music.muted = true;
+						music.play().catch(() => {});
+						fallback.style.display = 'block';
+					});
+				};
+
+				if (musicEnabled) playMusic();
+
+				if (fallbackBtn) {
+					fallbackBtn.addEventListener('click', () => {
+						music.muted = false;
+						music.volume = 0.06;
+						music.play().then(() => fallback.style.display = 'none');
+					});
+				}
+			})();
+		</script>
+	</body>
+</html>
