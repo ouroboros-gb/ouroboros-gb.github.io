@@ -149,8 +149,24 @@
 			</button>
 		</section>
 
+
 		<!-- Brief Overview / Teaser on Home Page -->
 		<div id="overview" class="content-page">
+
+<!-- Modern flex - probably what you want -->
+<div class="content-image">
+  <img src="adolf.png" alt="Adolf Hitler Portrait">
+</div>
+
+<style>
+.content-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 0vh;      /* centers on whole page vertically too */
+}
+</style>
+
 			<header>
 				<h1 class="title"></h1>
 				<div class="byline"></div>
@@ -161,8 +177,8 @@
 			</p>
 			<div class="credits">
 				Website created and maintained by Ouroboros. Credit to holocaust101 for resources.
-				
-				This website contains satirical and parody content. All material presented is for entertainment and educational purposes only. Views expressed may include exaggeration, irony, or fictional elements to provoke thought and highlight historical revisionism. No endorsement of violence, hate, or illegal activity is intended. Readers are encouraged to conduct their own research and think critically.<br>
+
+                This website contains satirical and parody content. All material presented is for entertainment and educational purposes only. Views expressed may include exaggeration, irony, or fictional elements to provoke thought and highlight historical revisionism. No endorsement of violence, hate, or illegal activity is intended. Readers are encouraged to conduct their own research and think critically.<br>
 			</div>
 		</div>
 
@@ -225,5 +241,4 @@
 			})();
 		</script>
 	</body>
-
 </html>
